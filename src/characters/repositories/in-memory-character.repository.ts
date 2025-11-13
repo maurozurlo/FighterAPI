@@ -1,0 +1,28 @@
+import { Injectable } from '@nestjs/common';
+import { CharacterRepository } from './character.repository';
+import { Character } from '../models/character.model';
+
+@Injectable()
+export class InMemoryCharacterRepository implements CharacterRepository {
+    private characters: Character[] = [];
+
+    save(character: Character): Character {
+        this.characters.push(character);
+        return character;
+    }
+
+    findAll(): Character[] {
+        return this.characters;
+    }
+
+    findById(id: string): Character | undefined {
+        return this.characters.find(c => c.id === id);
+    }
+
+    delete(id: string): boolean {
+        const index = this.characters.findIndex(c => c.id === id);
+        if (index === -1) return false;
+        this.characters.splice(index, 1);
+        return true;
+    }
+}

@@ -1,25 +1,33 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, Inject } from '@nestjs/common';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { randomUUID } from 'crypto';
 import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/models/job.model';
+import { InMemoryCharacterRepository } from './repositories/in-memory-character.repository';
+import { Character } from './models/character.model';
 
 @Injectable()
 export class CharactersService {
-    constructor(private readonly jobsService: JobsService) { }
+    constructor(
+        private readonly jobsService: JobsService,
+        @Inject('CharacterRepository')
+        private readonly characterRepository: InMemoryCharacterRepository,
+    ) { }
 
-    create(createCharacterDto: CreateCharacterDto) {
+    create(createCharacterDto: CreateCharacterDto): Character {
         const { name, job } = createCharacterDto;
+
+        if (!name || !name.trim().length) {
+            throw new BadRequestException("Missing character name.")
+        }
 
         const jobData: Job | undefined = this.jobsService.findByName(job);
         if (!jobData) {
-            throw new BadRequestException(`Invalid job: ${job}`);
+            throw new BadRequestException(`Invalid job: ${job}.`);
         }
 
-        const id = randomUUID();
-
-        return {
-            id,
+        const character: Character = {
+            id: randomUUID(),
             name,
             job: jobData.name,
             stats: {
@@ -30,5 +38,13 @@ export class CharactersService {
             },
             createdAt: new Date().toISOString(),
         };
+
+        this.characterRepository.save(character);
+
+        return character;
+    }
+
+    findAll(): Character[] {
+        return this.characterRepository.findAll();
     }
 }
