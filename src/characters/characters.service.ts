@@ -54,7 +54,7 @@ export class CharactersService {
         return this.characterRepository.update(id, updatedData);
     }
 
-    findOne(id: string): CharacterExpanded {
+    findOne(id: string): CharacterExpanded | undefined {
         const character = this.characterRepository.findById(id);
         if (!character) {
             throw new NotFoundException(`Character with id ${id} not found.`);
