@@ -3,10 +3,9 @@ import { CharactersController } from './characters.controller';
 import { CharactersService } from './characters.service';
 import { JobsModule } from '../jobs/jobs.module';
 import { InMemoryCharacterRepository } from './repositories/in-memory-character.repository';
-import { BattleModule } from 'src/battle/battle.module';
 
 @Module({
-    imports: [JobsModule, BattleModule],
+    imports: [JobsModule],
     controllers: [CharactersController],
     providers: [
         CharactersService,
@@ -15,5 +14,6 @@ import { BattleModule } from 'src/battle/battle.module';
             useClass: InMemoryCharacterRepository,
         },
     ],
+    exports: [CharactersService]
 })
 export class CharactersModule { }

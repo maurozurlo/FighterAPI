@@ -5,7 +5,6 @@ import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/models/job.model';
 import { InMemoryCharacterRepository } from './repositories/in-memory-character.repository';
 import { Character, CharacterExpanded, CharacterOverview } from './models/character.model';
-import { BattleService } from 'src/battle/battle.service';
 
 @Injectable()
 export class CharactersService {
@@ -13,7 +12,6 @@ export class CharactersService {
         private readonly jobsService: JobsService,
         @Inject('CharacterRepository')
         private readonly characterRepository: InMemoryCharacterRepository,
-        private readonly battleService: BattleService,
     ) { }
 
     create(createCharacterDto: CreateCharacterDto): Character {
@@ -29,8 +27,8 @@ export class CharactersService {
             name,
             level: 1,
             health: {
-                current: 100,
-                max: 100
+                current: jobData.healthPoints,
+                max: jobData.healthPoints
             },
             status: 'alive',
             job: jobData.name,
@@ -50,6 +48,10 @@ export class CharactersService {
 
     findAll(): CharacterOverview[] {
         return this.characterRepository.findAll();
+    }
+
+    update(id: string, updatedData: Partial<Character>): Character | null {
+        return this.characterRepository.update(id, updatedData);
     }
 
     findOne(id: string): CharacterExpanded {

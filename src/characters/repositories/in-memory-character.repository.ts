@@ -14,6 +14,7 @@ export class InMemoryCharacterRepository implements CharacterRepository {
     findAll(): CharacterOverview[] {
         return this.characters.map(
             (c): CharacterOverview => ({
+                id: c.id,
                 name: c.name,
                 status: c.status,
                 job: c.job,
@@ -31,4 +32,12 @@ export class InMemoryCharacterRepository implements CharacterRepository {
         this.characters.splice(index, 1);
         return true;
     }
+
+    update(id: string, updatedData: Partial<Character>): Character | null {
+        const index = this.characters.findIndex(c => c.id === id);
+        if (index === -1) return null;
+        this.characters[index] = { ...this.characters[index], ...updatedData };
+        return this.characters[index];
+    }
 }
+
