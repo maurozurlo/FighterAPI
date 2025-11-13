@@ -35,7 +35,6 @@ describe('BattleSimulator', () => {
         status: 'alive',
         health: { current: 20, max: 20 },
         stats: {
-            healthPoints: 20,
             strength: 10,
             dexterity: 5,
             intelligence: 5,
@@ -61,7 +60,6 @@ describe('BattleSimulator', () => {
                 job: 'Thief',
                 health: { current: 15, max: 15 },
                 stats: {
-                    healthPoints: 15,
                     strength: 4,
                     dexterity: 10,
                     intelligence: 4,
@@ -128,7 +126,6 @@ describe('BattleSimulator', () => {
                 id: 'char-2',
                 health: { current: 100, max: 100 },
                 stats: {
-                    healthPoints: 100,
                     strength: 50,
                     dexterity: 50,
                     intelligence: 50,
@@ -166,7 +163,6 @@ describe('BattleSimulator', () => {
         it('should handle one-shot kills (defender dies on first attack)', () => {
             const char1 = createMockCharacter({
                 stats: {
-                    healthPoints: 100,
                     strength: 100,
                     dexterity: 100,
                     intelligence: 100,
@@ -194,12 +190,12 @@ describe('BattleSimulator', () => {
             // Create two evenly matched characters with high HP
             const char1 = createMockCharacter({
                 health: { current: 200, max: 200 },
-                stats: { healthPoints: 200, strength: 5, dexterity: 5, intelligence: 5 }
+                stats: { strength: 5, dexterity: 5, intelligence: 5 }
             });
             const char2 = createMockCharacter({
                 id: 'char-2',
                 health: { current: 200, max: 200 },
-                stats: { healthPoints: 200, strength: 5, dexterity: 5, intelligence: 5 }
+                stats: { strength: 5, dexterity: 5, intelligence: 5 }
             });
 
             // Mock low attack values to prolong battle

@@ -33,7 +33,6 @@ export class CharactersService {
             status: 'alive',
             job: jobData.name,
             stats: {
-                healthPoints: jobData.healthPoints,
                 strength: jobData.strength,
                 dexterity: jobData.dexterity,
                 intelligence: jobData.intelligence,

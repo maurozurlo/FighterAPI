@@ -8,7 +8,6 @@ export interface Character {
     status: CharacterStatus;
     health: { current: number; max: number };
     stats: {
-        healthPoints: number;
         strength: number;
         dexterity: number;
         intelligence: number;

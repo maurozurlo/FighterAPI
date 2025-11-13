@@ -101,7 +101,6 @@ describe('CharactersService', () => {
             status: 'alive',
             health: { current: 100, max: 100 },
             stats: {
-                healthPoints: 100,
                 strength: 10,
                 dexterity: 5,
                 intelligence: 2,

@@ -32,7 +32,6 @@ export class BattleController {
                         status: "alive",
                         job: "Warrior",
                         stats: {
-                            healthPoints: 20,
                             strength: 8,
                             dexterity: 5,
                             intelligence: 3
@@ -49,7 +48,6 @@ export class BattleController {
                         status: "dead",
                         job: "Mage",
                         stats: {
-                            healthPoints: 15,
                             strength: 4,
                             dexterity: 6,
                             intelligence: 10

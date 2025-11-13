@@ -41,7 +41,6 @@ describe('BattleService', () => {
         status: 'alive',
         health: { current: 20, max: 20 },
         stats: {
-            healthPoints: 20,
             strength: 10,
             dexterity: 5,
             intelligence: 5,
