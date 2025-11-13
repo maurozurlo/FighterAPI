@@ -1,4 +1,4 @@
-# Take Home Assignment NEO
+# Take Home Assignment NEO by Mauro Zurlo
 
 A small NestJS-based turn-based battle simulator and character/job modeler.
 
@@ -7,19 +7,25 @@ This project models characters with jobs (Warrior, Thief, Mage) and simulates ba
 ## Quick start
 
 1. Install dependencies
-
 ```powershell
 npm install
 ```
 
 2. Start the dev server (hot reload)
-
 ```powershell
 npm run start:dev
 ```
 
-3. Run tests
+3. Access the Swagger API documentation
 
+   Open your browser and navigate to: `http://localhost:3000/api`
+
+   The interactive Swagger UI provides:
+   - Complete API documentation
+   - Request/response schemas with examples
+   - Try-it-out functionality to test endpoints directly
+
+4. Run tests
 ```powershell
 npm run test
 npm run test:e2e
@@ -29,50 +35,54 @@ npm run test:cov
 ## Architecture & important files
 
 - `src/app.module.ts` — root module; imports `CharactersModule` and `BattleModule` (main boundaries).
-- `src/main.ts` — application entry; sets a global `ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })`.
+- `src/main.ts` — application entry; sets a global `ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })` and configures Swagger documentation.
 - `src/characters` — character DTOs, models, controller and the `CharacterRepository` abstraction.
 - `src/characters/repositories/in-memory-character.repository.ts` — current persistence implementation (in-memory).
 - `src/jobs/constants/jobs.data.ts` — canonical job data (stats, attackFormula, speedFormula).
 - `src/battle` — battle service and `BattleSimulator` which executes turns and logs results.
 - `src/battle/utils/formula.util.ts` — evaluates formula strings with `mathjs`.
 
-## API (examples)
+## API Documentation
 
-Base path: `/api/v1`
+The API is fully documented using Swagger/OpenAPI. Once the server is running, access the interactive documentation at `http://localhost:3000/api`.
 
-- Create a character
+### Base path: `/api/v1`
 
-  POST /api/v1/character
+- **Create a character**
+
+  `POST /api/v1/character`
 
   Body (JSON):
-  ```json
+```json
   {
     "name": "Link",
     "job": "Warrior"
   }
-  ```
+```
 
-- List characters
+- **List characters**
 
-  GET /api/v1/character
+  `GET /api/v1/character`
 
-- Get character details (includes job formulas)
+- **Get character details** (includes job formulas)
 
-  GET /api/v1/character/:id
+  `GET /api/v1/character/:id`
 
-- Run a battle between two characters
+- **Run a battle between two characters**
 
-  POST /api/v1/battle
+  `POST /api/v1/battle`
 
   Body (JSON):
-  ```json
+```json
   {
     "characterId1": "<id-1>",
     "characterId2": "<id-2>"
   }
-  ```
+```
 
-  Response: `BattleResult` containing `log`, `winner`, and `loser` objects.
+  Response: `BattleResult` containing `log`, `winner`, and `loser` objects with complete battle statistics.
+
+All endpoints include detailed request/response examples in the Swagger documentation.
 
 ## Formulas and randomness
 
@@ -82,9 +92,10 @@ Base path: `/api/v1`
 
 ## Project conventions & tips for contributors
 
-- Dependency Injection: the characters repository is injected using the token `'CharacterRepository'`. Keep this token when adding other implementations (e.g. a DB-backed repository) to avoid breaking DI consumers.
-- Validation: Because the app uses `ValidationPipe` with `whitelist` and `forbidNonWhitelisted`, DTOs must be accurate — extra fields are rejected.
-- Testing: Jest + ts-jest are configured. Unit tests live next to services (e.g. `*.spec.ts`). To write deterministic battle tests, stub `Math.random()`.
+- **Dependency Injection**: the characters repository is injected using the token `'CharacterRepository'`. Keep this token when adding other implementations (e.g. a DB-backed repository) to avoid breaking DI consumers.
+- **Validation**: Because the app uses `ValidationPipe` with `whitelist` and `forbidNonWhitelisted`, DTOs must be accurate — extra fields are rejected.
+- **Testing**: Jest + ts-jest are configured. Unit tests live next to services (e.g. `*.spec.ts`). To write deterministic battle tests, stub `Math.random()`.
+- **API Documentation**: All controllers and DTOs use Swagger decorators (`@ApiTags`, `@ApiOperation`, `@ApiResponse`, `@ApiProperty`) to generate comprehensive API documentation.
 
 ## Adding a new Job
 
@@ -104,15 +115,13 @@ Base path: `/api/v1`
 
 ## Where to start reading the code
 
-- Begin with `src/main.ts` to see global configuration.
+- Begin with `src/main.ts` to see global configuration and Swagger setup.
 - Inspect `src/characters/characters.service.ts` to see how characters are created and validated.
 - Read `src/battle/battle-simulator.service.ts` to understand combat flow and where randomness is applied.
+- Visit `http://localhost:3000/api` (with server running) to explore the interactive API documentation.
 
-## Questions or next steps
+## Notes on AI Assistance
 
-If you'd like, I can:
+Some parts of this project — including this README, documentation wording, and initial unit test scaffolding — were written with the help of a large language model (LLM). All code and logic have been reviewed and adapted manually.
 
-1. Add a short example test that mocks `Math.random()` to make `BattleSimulator` deterministic.
-2. Add a Postman/HTTPie examples section with full requests and expected responses.
-
-Pull requests and improvements are welcome — open an issue or a PR describing the change.
+Mauro Zurlo. 2025
