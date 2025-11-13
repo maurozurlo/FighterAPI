@@ -1,98 +1,118 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Take Home Assignment NEO
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A small NestJS-based turn-based battle simulator and character/job modeler.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project models characters with jobs (Warrior, Thief, Mage) and simulates battles using job-specific formulas for attack and speed. It uses an in-memory repository for characters and evaluates job formulas at runtime using mathjs.
 
-## Description
+## Quick start
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. Install dependencies
 
-## Project setup
-
-```bash
-$ npm install
+```powershell
+npm install
 ```
 
-## Compile and run the project
+2. Start the dev server (hot reload)
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```powershell
+npm run start:dev
 ```
 
-## Run tests
+3. Run tests
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```powershell
+npm run test
+npm run test:e2e
+npm run test:cov
 ```
 
-## Deployment
+## Architecture & important files
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- `src/app.module.ts` — root module; imports `CharactersModule` and `BattleModule` (main boundaries).
+- `src/main.ts` — application entry; sets a global `ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })`.
+- `src/characters` — character DTOs, models, controller and the `CharacterRepository` abstraction.
+- `src/characters/repositories/in-memory-character.repository.ts` — current persistence implementation (in-memory).
+- `src/jobs/constants/jobs.data.ts` — canonical job data (stats, attackFormula, speedFormula).
+- `src/battle` — battle service and `BattleSimulator` which executes turns and logs results.
+- `src/battle/utils/formula.util.ts` — evaluates formula strings with `mathjs`.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## API (examples)
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Base path: `/api/v1`
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+- Create a character
 
-## Resources
+  POST /api/v1/character
 
-Check out a few resources that may come in handy when working with NestJS:
+  Body (JSON):
+  ```json
+  {
+    "name": "Link",
+    "job": "Warrior"
+  }
+  ```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- List characters
 
-## Support
+  GET /api/v1/character
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Get character details (includes job formulas)
 
-## Stay in touch
+  GET /api/v1/character/:id
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Run a battle between two characters
 
-## License
+  POST /api/v1/battle
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+  Body (JSON):
+  ```json
+  {
+    "characterId1": "<id-1>",
+    "characterId2": "<id-2>"
+  }
+  ```
+
+  Response: `BattleResult` containing `log`, `winner`, and `loser` objects.
+
+## Formulas and randomness
+
+- Job attack/speed formulas are plain arithmetic strings (e.g. `0.8 * strength + 0.2 * dexterity`) stored in `src/jobs/constants/jobs.data.ts`.
+- `computeFormula` in `src/battle/utils/formula.util.ts` uses `mathjs.evaluate(formula, stats)` and must return a number. If you change formula syntax, update this utility and related tests.
+- `BattleSimulator` uses `Math.random()` to determine speed and damage. For deterministic tests, mock `Math.random()` or refactor the simulator to accept an injectable RNG function.
+
+## Project conventions & tips for contributors
+
+- Dependency Injection: the characters repository is injected using the token `'CharacterRepository'`. Keep this token when adding other implementations (e.g. a DB-backed repository) to avoid breaking DI consumers.
+- Validation: Because the app uses `ValidationPipe` with `whitelist` and `forbidNonWhitelisted`, DTOs must be accurate — extra fields are rejected.
+- Testing: Jest + ts-jest are configured. Unit tests live next to services (e.g. `*.spec.ts`). To write deterministic battle tests, stub `Math.random()`.
+
+## Adding a new Job
+
+1. Update `src/jobs/constants/jobs.data.ts` with a new `Job` object (include `attackFormula` and `speedFormula`).
+2. Ensure the formulas reference `strength`, `dexterity`, and/or `intelligence` and evaluate to numeric values.
+3. If needed, update any DTOs or consumers that assume a fixed set of job names.
+
+## Scripts
+
+- `npm run start:dev` — start in watch mode
+- `npm run build` — compile
+- `npm run start:prod` — run compiled output
+- `npm run test` — run unit tests
+- `npm run test:e2e` — run e2e tests
+- `npm run test:cov` — coverage
+- `npm run lint` — lint and auto-fix where possible
+
+## Where to start reading the code
+
+- Begin with `src/main.ts` to see global configuration.
+- Inspect `src/characters/characters.service.ts` to see how characters are created and validated.
+- Read `src/battle/battle-simulator.service.ts` to understand combat flow and where randomness is applied.
+
+## Questions or next steps
+
+If you'd like, I can:
+
+1. Add a short example test that mocks `Math.random()` to make `BattleSimulator` deterministic.
+2. Add a Postman/HTTPie examples section with full requests and expected responses.
+
+Pull requests and improvements are welcome — open an issue or a PR describing the change.
