@@ -15,3 +15,5 @@ export interface Character {
     };
     createdAt: string;
 }
+
+export type CharacterOverview = Pick<Character, 'name' | 'status' | 'job'>;

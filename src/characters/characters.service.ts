@@ -1,10 +1,10 @@
-import { Injectable, BadRequestException, Inject } from '@nestjs/common';
+import { Injectable, BadRequestException, Inject, NotFoundException } from '@nestjs/common';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { randomUUID } from 'crypto';
 import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/models/job.model';
 import { InMemoryCharacterRepository } from './repositories/in-memory-character.repository';
-import { Character } from './models/character.model';
+import { Character, CharacterOverview } from './models/character.model';
 
 @Injectable()
 export class CharactersService {
@@ -46,7 +46,15 @@ export class CharactersService {
         return character;
     }
 
-    findAll(): Character[] {
+    findAll(): CharacterOverview[] {
         return this.characterRepository.findAll();
+    }
+
+    findOne(id: string): Character {
+        const character = this.characterRepository.findById(id);
+        if (!character) {
+            throw new NotFoundException(`Character with id ${id} not found.`);
+        }
+        return character;
     }
 }

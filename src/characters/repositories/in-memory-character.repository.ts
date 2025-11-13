@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CharacterRepository } from './character.repository';
-import { Character } from '../models/character.model';
+import { Character, CharacterOverview } from '../models/character.model';
 
 @Injectable()
 export class InMemoryCharacterRepository implements CharacterRepository {
@@ -11,8 +11,14 @@ export class InMemoryCharacterRepository implements CharacterRepository {
         return character;
     }
 
-    findAll(): Character[] {
-        return this.characters;
+    findAll(): CharacterOverview[] {
+        return this.characters.map(
+            (c): CharacterOverview => ({
+                name: c.name,
+                status: c.status,
+                job: c.job,
+            }),
+        );
     }
 
     findById(id: string): Character | undefined {
