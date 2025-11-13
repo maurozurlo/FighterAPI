@@ -17,10 +17,6 @@ export class CharactersService {
     create(createCharacterDto: CreateCharacterDto): Character {
         const { name, job } = createCharacterDto;
 
-        if (!name || !name.trim().length) {
-            throw new BadRequestException("Missing character name.")
-        }
-
         const jobData: Job | undefined = this.jobsService.findByName(job);
         if (!jobData) {
             throw new BadRequestException(`Invalid job: ${job}.`);

@@ -31,3 +31,5 @@ export const JOBS: Job[] = [
         speedModifierFormula: '0.4 * dexterity + 0.1 * strength',
     },
 ];
+
+export const JOB_NAMES = JOBS.map(j => j.name.toLocaleLowerCase()) as Job['name'][];
