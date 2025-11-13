@@ -4,7 +4,8 @@ import { randomUUID } from 'crypto';
 import { JobsService } from '../jobs/jobs.service';
 import { Job } from '../jobs/models/job.model';
 import { InMemoryCharacterRepository } from './repositories/in-memory-character.repository';
-import { Character, CharacterOverview } from './models/character.model';
+import { Character, CharacterExpanded, CharacterOverview } from './models/character.model';
+import { BattleService } from 'src/battle/battle.service';
 
 @Injectable()
 export class CharactersService {
@@ -12,6 +13,7 @@ export class CharactersService {
         private readonly jobsService: JobsService,
         @Inject('CharacterRepository')
         private readonly characterRepository: InMemoryCharacterRepository,
+        private readonly battleService: BattleService,
     ) { }
 
     create(createCharacterDto: CreateCharacterDto): Character {
@@ -50,11 +52,16 @@ export class CharactersService {
         return this.characterRepository.findAll();
     }
 
-    findOne(id: string): Character {
+    findOne(id: string): CharacterExpanded {
         const character = this.characterRepository.findById(id);
         if (!character) {
             throw new NotFoundException(`Character with id ${id} not found.`);
         }
-        return character;
+        const job = this.jobsService.findByName(character.job);
+        if (!job) {
+            throw new BadRequestException(`Character with id ${id} has an invalid job: ${character.job}`);
+        }
+
+        return { ...character, attackFormula: job.attackFormula, speedFormula: job.speedFormula };
     }
 }

@@ -4,6 +4,6 @@ export interface Job {
     strength: number;
     dexterity: number;
     intelligence: number;
-    attackModifierFormula: string;
-    speedModifierFormula: string;
+    attackFormula: string;
+    speedFormula: string;
 }

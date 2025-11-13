@@ -17,3 +17,8 @@ export interface Character {
 }
 
 export type CharacterOverview = Pick<Character, 'name' | 'status' | 'job'>;
+
+export type CharacterExpanded = Character & {
+    attackFormula: string;
+    speedFormula: string;
+}
