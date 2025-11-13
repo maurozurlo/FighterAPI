@@ -1,7 +1,12 @@
+export type CharacterStatus = 'alive' | 'dead'
+
 export interface Character {
     id: string;
     name: string;
     job: string;
+    level: number;
+    status: CharacterStatus;
+    health: { current: number; max: number };
     stats: {
         healthPoints: number;
         strength: number;

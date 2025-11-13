@@ -25,6 +25,12 @@ export class CharactersService {
         const character: Character = {
             id: randomUUID(),
             name,
+            level: 1,
+            health: {
+                current: 100,
+                max: 100
+            },
+            status: 'alive',
             job: jobData.name,
             stats: {
                 healthPoints: jobData.healthPoints,
