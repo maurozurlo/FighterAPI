@@ -1,4 +1,4 @@
-# Take Home Assignment NEO by Mauro Zurlo
+FighterAPI by Mauro Zurlo
 
 A small NestJS-based turn-based battle simulator and character/job modeler.
 
